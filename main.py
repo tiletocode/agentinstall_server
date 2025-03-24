@@ -31,9 +31,9 @@ log_path = os.path.join(log_dir, log_file)
 logger = logging.getLogger("installer_server")
 logger.setLevel(getattr(logging, log_level, logging.INFO))
 
-# 핸들러 설정 (UTF-8 인코딩 추가)
+# 핸들러 설정
 handler = TimedRotatingFileHandler(
-    log_path, when=when, interval=interval, backupCount=backup_count, encoding="utf-8"
+    log_path, when=when, interval=interval, backupCount=backup_count
 )
 formatter = logging.Formatter(log_format)
 handler.setFormatter(formatter)
@@ -108,10 +108,10 @@ def fetch_and_save_data():
         logger.error(f"SQL 문법 오류: {prog_err}")
     except mysql.connector.InterfaceError as iface_err:
         logger.error(f"데이터베이스 연결 오류: {iface_err}")
-    except mysql.connector.Error as db_err:
-        logger.error(f"데이터베이스 오류: {db_err}")
+    except mysql.connector.Error as err:
+        logger.error(f"일반적인 DB 오류: {err}")
     except Exception as ex:
-        logger.error(f"예상하지 못한 오류 발생: {ex}", exc_info=True)
+        logger.error(f"예상하지 못한 오류 발생: {ex}")
     finally:
         if 'cursor' in locals() and cursor:
             cursor.close()
