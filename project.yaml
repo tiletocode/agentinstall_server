@@ -1,0 +1,30 @@
+- ApiToken: AOCPZM89F2DBVCZB8SD6BI36
+  LicenseKey: x208g2nudnmou-z4t0u1p93r8ru-z43mh8bank1ub3
+  Name: request
+  Platform: KUBERNETES
+  ProductType: CPM
+  ProjectCode: 1
+- ApiToken: ALK0PQXA071N290KTCVX4A8B
+  LicenseKey: x20gg27bhmf42-x6qmv3dluq7k54-x3cv5b9l6sd14m
+  Name: license count
+  Platform: VR
+  ProductType: VR
+  ProjectCode: 2
+- ApiToken: PCFQY9ESR5K0BDRJRLYG06C5
+  LicenseKey: x20og9ecogon7-x7q0a212tds8tu-z3lp6ivfrlo84p
+  Name: 내부테스트
+  Platform: NMS
+  ProductType: NETWORK
+  ProjectCode: 3
+- ApiToken: GE9GSWE114DC07VDR34XFCE8
+  LicenseKey: x210ghf3q6skk-x5fbm81me5otbm-z7rvu84j1fkv8e
+  Name: 180(control-plane)
+  Platform: NMS
+  ProductType: NETWORK
+  ProjectCode: 4
+- ApiToken: FIB681BBEXW7838XGZEB1MNI
+  LicenseKey: x218geo3mpmjn-zjh2v57d05ult-x7t6a3qdpss5f1
+  Name: installscript test
+  Platform: INFRA
+  ProductType: SMS
+  ProjectCode: 5

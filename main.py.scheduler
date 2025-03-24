@@ -1,0 +1,65 @@
+import mysql.connector
+import configparser
+import yaml
+import schedule
+import time
+
+
+# INI 파일에서 DB 및 스케줄 설정 읽기
+def load_config(config_file):
+
+
+    config = configparser.ConfigParser()
+    config.read(config_file, encoding='utf-8')
+    db_config = {
+        'host': config['mysql']['host'],
+        'port': int(config['mysql'].get('port', 3306)),  # 포트 추가 (기본값 3306)
+        'user': config['mysql']['user'],
+        'password': config['mysql']['password'],
+        'database': config['mysql']['database']
+    }
+    yaml_file_path = config['output']['yaml_file_path']
+    interval = int(config['schedule']['interval_minutes'])  # 주기 (분 단위)
+    return db_config, yaml_file_path, interval
+
+
+# MySQL 데이터 조회 및 YAML 저장
+def fetch_and_save_data():
+    try:
+        db_config, yaml_file_path, _ = load_config(config_file)
+        connection = mysql.connector.connect(**db_config)
+        cursor = connection.cursor(dictionary=True)
+        cursor.execute("SELECT ProjectCode, Name, ProductType, ApiToken, Platform, LicenseKey FROM ApmProject WHERE LicenseKey != ''")
+        results = cursor.fetchall()
+
+        # 결과를 YAML로 저장
+        with open(yaml_file_path, "w", encoding="utf-8") as yaml_file:
+            yaml.dump(results, yaml_file, allow_unicode=True, default_flow_style=False)
+
+        print(f"{time.strftime('%Y-%m-%d %H:%M:%S')} - ApmProject 데이터를 YAML 파일로 저장했습니다: {yaml_file_path}")
+
+    except mysql.connector.Error as err:
+        print(f"Error: {err}")
+    finally:
+        if 'cursor' in locals():
+            cursor.close()
+        if 'connection' in locals() and connection.is_connected():
+            connection.close()
+
+
+# INI 파일 경로
+config_file = "config.ini"
+
+# 스케줄러 설정
+if __name__ == "__main__":
+    db_config, yaml_file_path, interval = load_config(config_file)
+
+
+    fetch_and_save_data()
+    # 주기적으로 실행 설정
+    schedule.every(interval).minutes.do(fetch_and_save_data)
+
+    print(f"{interval}분 후에 재실행됩니다.")
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
